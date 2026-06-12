@@ -1,0 +1,21 @@
+engagement:
+  name: "Local Lab Exposure Assessment"
+  owner: "Sergio Rodriguez"
+  purpose: "Portfolio lab assessment against owned systems only"
+  authorized: true
+  authorization_statement: "Testing is limited to assets owned or explicitly approved by the operator."
+
+targets:
+  include:
+    - "127.0.0.1"
+  exclude: []
+
+limits:
+  max_hosts: 256
+  max_ports_per_host: 1000
+  default_timeout_seconds: 1.5
+  default_concurrency: 100
+
+reporting:
+  classification: "UNCLASSIFIED"
+  distribution: "Portfolio demonstration, sanitized"

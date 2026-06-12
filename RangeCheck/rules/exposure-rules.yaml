@@ -1,0 +1,126 @@
+rules:
+  - id: RC-EXPOSURE-TELNET-001
+    title: "Insecure Telnet Service Exposed"
+    category: "cleartext-remote-access"
+    match:
+      ports: [23]
+      services: ["telnet"]
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L"
+      score: 8.6
+    mappings:
+      nist_sp_800_53:
+        - "AC-17"
+        - "IA-2"
+        - "SC-8"
+        - "SC-13"
+      mitre_attack:
+        - technique_id: "T1040"
+          technique_name: "Network Sniffing"
+        - technique_id: "T1557"
+          technique_name: "Adversary-in-the-Middle"
+        - technique_id: "T1021"
+          technique_name: "Remote Services"
+      cwe:
+        - "CWE-319"
+    description: >
+      Telnet transmits credentials and session data without encryption.
+    recommendation: >
+      Disable Telnet and replace it with SSH using strong authentication and network restrictions.
+    references:
+      - "https://attack.mitre.org/techniques/T1040/"
+      - "https://cwe.mitre.org/data/definitions/319.html"
+
+  - id: RC-EXPOSURE-FTP-001
+    title: "FTP Service Exposed"
+    category: "cleartext-protocol"
+    match:
+      ports: [21]
+      services: ["ftp"]
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+      score: 6.5
+    mappings:
+      nist_sp_800_53:
+        - "AC-17"
+        - "SC-8"
+        - "SC-13"
+      mitre_attack:
+        - technique_id: "T1040"
+          technique_name: "Network Sniffing"
+      cwe:
+        - "CWE-319"
+    description: >
+      FTP may transmit credentials and file data in cleartext.
+    recommendation: >
+      Replace FTP with SFTP or FTPS and restrict access to trusted networks.
+    references:
+      - "https://cwe.mitre.org/data/definitions/319.html"
+
+  - id: RC-EXPOSURE-SMB-001
+    title: "SMB or NetBIOS Service Exposed"
+    category: "lateral-movement-risk"
+    match:
+      ports: [139, 445]
+      services: ["smb", "netbios"]
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:L/A:L"
+      score: 8.6
+    mappings:
+      nist_sp_800_53:
+        - "AC-4"
+        - "AC-17"
+        - "CM-7"
+        - "SC-7"
+      mitre_attack:
+        - technique_id: "T1021.002"
+          technique_name: "SMB/Windows Admin Shares"
+        - technique_id: "T1135"
+          technique_name: "Network Share Discovery"
+      cwe:
+        - "CWE-200"
+    description: >
+      SMB and NetBIOS exposure may support share enumeration and lateral movement.
+    recommendation: >
+      Restrict SMB to trusted networks, disable SMBv1, enforce signing, and monitor access.
+    references:
+      - "https://attack.mitre.org/techniques/T1021/002/"
+
+  - id: RC-EXPOSURE-RDP-001
+    title: "Remote Desktop Service Exposed"
+    category: "remote-access-risk"
+    match:
+      ports: [3389]
+      services: ["rdp"]
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L"
+      score: 9.1
+    mappings:
+      nist_sp_800_53:
+        - "AC-17"
+        - "IA-2"
+        - "SC-7"
+        - "AU-12"
+      mitre_attack:
+        - technique_id: "T1021.001"
+          technique_name: "Remote Desktop Protocol"
+        - technique_id: "T1110"
+          technique_name: "Brute Force"
+        - technique_id: "T1078"
+          technique_name: "Valid Accounts"
+      cwe:
+        - "CWE-284"
+    description: >
+      Exposed RDP is commonly targeted for credential attacks and unauthorized remote access.
+    recommendation: >
+      Restrict RDP behind VPN or allowlists, require MFA, enforce lockout policies, and centralize logs.
+    references:
+      - "https://attack.mitre.org/techniques/T1021/001/"

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ControlTrace Security Baseline Assessment</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #11182b;
+      --panel2: #17213a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --blue: #60a5fa;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --orange: #fb923c;
+      --red: #f87171;
+      --critical: #dc2626;
+      --border: #2b3656;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #11182b, #0f172a);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    code {
+      background: #020617;
+      border: 1px solid var(--border);
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: var(--green);
+    }
+
+    .severity, .status {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .Critical { background: var(--critical); color: white; }
+    .High { background: var(--red); color: #111827; }
+    .Medium { background: var(--orange); color: #111827; }
+    .Low { background: var(--yellow); color: #111827; }
+    .Informational { background: var(--blue); color: #111827; }
+
+    .pass { background: var(--green); color: #052e16; }
+    .fail { background: var(--red); color: #111827; }
+    .error { background: var(--orange); color: #111827; }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>ControlTrace Security Baseline Assessment</h1>
+      <p class="muted">
+        Local security baseline assessment with DISA STIG-style checks,
+        NIST SP 800-53 mapping, MITRE ATT&CK context, CVSS metadata, and POA&M-ready findings.
+      </p>
+
+      <p><strong>Classification:</strong> <code>{{ report.classification }}</code></p>
+      <p><strong>Host:</strong> <code>{{ report.hostname }}</code></p>
+      <p><strong>Platform:</strong> {{ report.platform }}</p>
+      <p><strong>Started:</strong> {{ report.started_at.isoformat() }}</p>
+      <p><strong>Completed:</strong> {{ report.completed_at.isoformat() }}</p>
+      <p><strong>Tool:</strong> {{ report.tool_name }} {{ report.tool_version }}</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="metric">{{ report.total_findings }}</div>
+        <div class="muted">Total Checks</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.passed_findings }}</div>
+        <div class="muted">Passed</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.failed_findings }}</div>
+        <div class="muted">Failed</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.severity_counts["Critical"] + report.severity_counts["High"] }}</div>
+        <div class="muted">Critical or High</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Failed Findings by Severity</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for severity, count in report.severity_counts.items() %}
+          <tr>
+            <td><span class="severity {{ severity }}">{{ severity }}</span></td>
+            <td>{{ count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Assessment Results</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Rule</th>
+            <th>Status</th>
+            <th>Severity</th>
+            <th>Framework Mapping</th>
+            <th>Evidence</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for finding in report.findings %}
+          <tr>
+            <td>
+              <strong>{{ finding.title }}</strong><br />
+              <span class="muted">{{ finding.rule_id }}</span><br />
+              {{ finding.description }}
+            </td>
+
+            <td>
+              <span class="status {{ finding.status }}">{{ finding.status | upper }}</span>
+            </td>
+
+            <td>
+              <span class="severity {{ finding.severity }}">{{ finding.severity }}</span><br />
+              CVSS {{ finding.cvss.score }}<br />
+              <code>{{ finding.cvss.vector }}</code>
+            </td>
+
+            <td>
+              <strong>NIST:</strong>
+              {% for control in finding.mappings.nist_sp_800_53 %}
+                <code>{{ control }}</code>
+              {% endfor %}
+              <br />
+
+              <strong>STIG:</strong>
+              {% for stig in finding.mappings.disa_stig %}
+                <code>{{ stig }}</code>
+              {% endfor %}
+              <br />
+
+              <strong>ATT&CK:</strong>
+              {% for technique in finding.mappings.mitre_attack %}
+                <code>{{ technique.technique_id }}</code>
+              {% endfor %}
+              <br />
+
+              <strong>CWE:</strong>
+              {% for cwe in finding.mappings.cwe %}
+                <code>{{ cwe }}</code>
+              {% endfor %}
+            </td>
+
+            <td>
+              <strong>Source:</strong> <code>{{ finding.evidence.source }}</code><br />
+              <strong>Collected:</strong> {{ finding.evidence.collected }}<br />
+              <strong>Value:</strong> <code>{{ finding.evidence.value }}</code><br />
+              {% if finding.evidence.error %}
+                <strong>Error:</strong> {{ finding.evidence.error }}
+              {% endif %}
+            </td>
+
+            <td>{{ finding.recommendation }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <p class="footer">
+      ControlTrace is intended for authorized local baseline assessment and portfolio demonstration.
+      It is not an official NIST, DISA, or government assessment product. Findings should be manually validated.
+    </p>
+  </main>
+</body>
+</html>

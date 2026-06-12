@@ -1,0 +1,72 @@
+rules:
+  - id: CT-LINUX-ACCOUNTS-SHELLS-001
+    title: "Unexpected Interactive Shell Accounts Require Review"
+    platform: "linux"
+    category: "account-management"
+    check:
+      type: "interactive_shell_review"
+      allowed_users:
+        - "root"
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N"
+      score: 5.5
+    mappings:
+      nist_sp_800_53:
+        - "AC-2"
+        - "AC-6"
+        - "IA-2"
+      disa_stig:
+        - "RHEL-09-411015"
+      mitre_attack:
+        - technique_id: "T1078"
+          technique_name: "Valid Accounts"
+        - technique_id: "T1087"
+          technique_name: "Account Discovery"
+      cwe:
+        - "CWE-266"
+    description: >
+      Accounts with interactive shells should be reviewed to confirm they are authorized and necessary.
+    recommendation: >
+      Disable unnecessary accounts, assign nologin shells to service accounts, and document approved interactive users.
+    references:
+      - "https://attack.mitre.org/techniques/T1078/"
+      - "https://attack.mitre.org/techniques/T1087/"
+
+  - id: CT-LINUX-PASSWD-PERM-001
+    title: "Sensitive Account Files Should Not Be World-Writable"
+    platform: "linux"
+    category: "filesystem-permissions"
+    check:
+      type: "path_permission_not_world_writable"
+      paths:
+        - "/etc/passwd"
+        - "/etc/shadow"
+        - "/etc/group"
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L"
+      score: 7.8
+    mappings:
+      nist_sp_800_53:
+        - "AC-6"
+        - "CM-6"
+        - "SI-7"
+      disa_stig:
+        - "RHEL-09-232030"
+      mitre_attack:
+        - technique_id: "T1222"
+          technique_name: "File and Directory Permissions Modification"
+        - technique_id: "T1098"
+          technique_name: "Account Manipulation"
+      cwe:
+        - "CWE-732"
+    description: >
+      World-writable account files may permit unauthorized account modification or privilege escalation.
+    recommendation: >
+      Restore secure ownership and permissions for account database files.
+    references:
+      - "https://attack.mitre.org/techniques/T1222/"
+      - "https://cwe.mitre.org/data/definitions/732.html"

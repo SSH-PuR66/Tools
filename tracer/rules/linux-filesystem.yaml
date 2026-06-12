@@ -1,0 +1,38 @@
+rules:
+  - id: CT-LINUX-FS-WORLDWRITABLE-001
+    title: "World-Writable Sensitive Directory Detected"
+    platform: "linux"
+    category: "filesystem-permissions"
+    check:
+      type: "path_permission_not_world_writable"
+      paths:
+        - "/etc"
+        - "/var/log"
+        - "/usr/bin"
+        - "/usr/sbin"
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L"
+      score: 7.8
+    mappings:
+      nist_sp_800_53:
+        - "AC-6"
+        - "CM-6"
+        - "SI-7"
+      disa_stig:
+        - "RHEL-09-232030"
+      mitre_attack:
+        - technique_id: "T1222"
+          technique_name: "File and Directory Permissions Modification"
+        - technique_id: "T1574"
+          technique_name: "Hijack Execution Flow"
+      cwe:
+        - "CWE-732"
+    description: >
+      Sensitive system directories should not be world-writable because improper permissions can enable privilege escalation or tampering.
+    recommendation: >
+      Remove world-writable permissions from sensitive directories and validate package ownership.
+    references:
+      - "https://attack.mitre.org/techniques/T1222/"
+      - "https://cwe.mitre.org/data/definitions/732.html"

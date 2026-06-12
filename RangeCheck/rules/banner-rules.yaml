@@ -1,0 +1,64 @@
+rules:
+  - id: RC-BANNER-OUTDATED-APACHE-001
+    title: "Potentially Outdated Apache Version Disclosed"
+    category: "version-disclosure"
+    match:
+      banner_regex:
+        - "Apache/2\\.2"
+        - "Apache/2\\.0"
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+      score: 6.3
+    mappings:
+      nist_sp_800_53:
+        - "RA-5"
+        - "SI-2"
+        - "CM-8"
+        - "CM-7"
+      mitre_attack:
+        - technique_id: "T1592"
+          technique_name: "Gather Victim Host Information"
+        - technique_id: "T1595"
+          technique_name: "Active Scanning"
+        - technique_id: "T1190"
+          technique_name: "Exploit Public-Facing Application"
+      cwe:
+        - "CWE-200"
+    description: >
+      The service banner appears to disclose an outdated Apache version.
+    recommendation: >
+      Confirm the installed version, apply vendor security updates, and reduce version disclosure.
+    references:
+      - "https://attack.mitre.org/techniques/T1592/"
+
+  - id: RC-BANNER-XPOWEREDBY-001
+    title: "Technology Disclosure Header Present"
+    category: "information-disclosure"
+    match:
+      banner_regex:
+        - "(?i)x-powered-by"
+    severity: "Low"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+      score: 5.3
+    mappings:
+      nist_sp_800_53:
+        - "CM-7"
+        - "RA-5"
+        - "SC-7"
+      mitre_attack:
+        - technique_id: "T1592"
+          technique_name: "Gather Victim Host Information"
+        - technique_id: "T1595"
+          technique_name: "Active Scanning"
+      cwe:
+        - "CWE-200"
+    description: >
+      The service discloses backend technology information through response headers.
+    recommendation: >
+      Remove or minimize technology disclosure headers where practical.
+    references:
+      - "https://cwe.mitre.org/data/definitions/200.html"

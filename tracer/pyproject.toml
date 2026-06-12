@@ -1,0 +1,37 @@
+[project]
+name = "controltrace"
+version = "0.1.0"
+description = "Audit-ready local security baseline assessment with NIST, MITRE, DISA STIG-style checks, CVSS-style scoring, and POA&M exports."
+authors = [
+  { name = "Sergio Rodriguez" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "jinja2>=3.1.4",
+  "pyyaml>=6.0.2",
+  "rich>=13.7.1"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.5.0",
+  "mypy>=1.10.0"
+]
+
+[project.scripts]
+controltrace = "controltrace.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RangeCheck Network Exposure Assessment</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #11182b;
+      --panel2: #17213a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --blue: #60a5fa;
+      --green: #34d399;
+      --yellow: #fbbf24;
+      --orange: #fb923c;
+      --red: #f87171;
+      --critical: #dc2626;
+      --border: #2b3656;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 32px 0;
+    }
+
+    .hero, .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 22px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #11182b, #0f172a);
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .metric {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    code {
+      background: #020617;
+      border: 1px solid var(--border);
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: var(--green);
+    }
+
+    .severity {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .Critical { background: var(--critical); color: white; }
+    .High { background: var(--red); color: #111827; }
+    .Medium { background: var(--orange); color: #111827; }
+    .Low { background: var(--yellow); color: #111827; }
+    .Informational { background: var(--blue); color: #111827; }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>RangeCheck Network Exposure Assessment</h1>
+      <p class="muted">
+        Authorized network exposure assessment with service fingerprinting,
+        YAML rule evaluation, CVSS metadata, NIST SP 800-53 mapping, and MITRE ATT&CK context.
+      </p>
+
+      <p><strong>Classification:</strong> <code>{{ report.classification }}</code></p>
+      <p><strong>Distribution:</strong> {{ report.distribution }}</p>
+      <p><strong>Target:</strong> <code>{{ report.target }}</code></p>
+      <p><strong>Started:</strong> {{ report.started_at.isoformat() }}</p>
+      <p><strong>Completed:</strong> {{ report.completed_at.isoformat() }}</p>
+      <p><strong>Tool:</strong> {{ report.tool_name }} {{ report.tool_version }}</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="metric">{{ report.total_hosts }}</div>
+        <div class="muted">Hosts With Findings</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.total_services }}</div>
+        <div class="muted">Open Services</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.total_vulnerabilities }}</div>
+        <div class="muted">Security Findings</div>
+      </div>
+
+      <div class="card">
+        <div class="metric">{{ report.severity_counts["Critical"] + report.severity_counts["High"] }}</div>
+        <div class="muted">Critical or High</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Methodology</h2>
+      <p>{{ report.methodology }}</p>
+    </section>
+
+    <section class="card">
+      <h2>Severity Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for severity, count in report.severity_counts.items() %}
+          <tr>
+            <td><span class="severity {{ severity }}">{{ severity }}</span></td>
+            <td>{{ count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    {% for host in report.hosts %}
+    <section class="card">
+      <h2>Host: <code>{{ host.host }}</code></h2>
+
+      <h3>Open Services</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Port</th>
+            <th>Protocol</th>
+            <th>Service</th>
+            <th>Banner</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for service in host.services %}
+          <tr>
+            <td>{{ service.port }}</td>
+            <td>{{ service.protocol }}</td>
+            <td>{{ service.service_name }}</td>
+            <td>{{ service.banner or "No banner observed" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h3>Findings</h3>
+
+      {% if host.vulnerabilities %}
+      <table>
+        <thead>
+          <tr>
+            <th>Finding</th>
+            <th>Severity</th>
+            <th>CVSS</th>
+            <th>NIST SP 800-53</th>
+            <th>MITRE ATT&CK</th>
+            <th>Recommendation</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for finding in host.vulnerabilities %}
+          <tr>
+            <td>
+              <strong>{{ finding.title }}</strong><br />
+              <span class="muted">{{ finding.rule_id }}</span><br />
+              {{ finding.description }}<br />
+              <strong>Evidence:</strong> <code>{{ finding.evidence }}</code>
+            </td>
+            <td><span class="severity {{ finding.severity }}">{{ finding.severity }}</span></td>
+            <td>
+              {{ finding.cvss.score }}<br />
+              <code>{{ finding.cvss.vector }}</code>
+            </td>
+            <td>
+              {% for control in finding.mappings.nist_sp_800_53 %}
+                <code>{{ control }}</code>
+              {% endfor %}
+            </td>
+            <td>
+              {% for technique in finding.mappings.mitre_attack %}
+                <code>{{ technique.technique_id }}</code>
+              {% endfor %}
+            </td>
+            <td>{{ finding.recommendation }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="muted">No rule-based findings were generated for this host.</p>
+      {% endif %}
+    </section>
+    {% endfor %}
+
+    <p class="footer">
+      RangeCheck is intended for authorized assessment, lab environments, and defensive security validation.
+      Results should be manually validated before remediation.
+    </p>
+  </main>
+</body>
+</html>

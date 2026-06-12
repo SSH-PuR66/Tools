@@ -1,0 +1,16 @@
+policy:
+  name: "ControlTrace Local Linux Baseline"
+  owner: "Sergio Rodriguez"
+  classification: "UNCLASSIFIED"
+  distribution: "Portfolio demonstration, sanitized"
+
+execution:
+  include_passed: true
+  output_dir: "reports"
+
+rules:
+  directory: "rules"
+
+notes:
+  - "This policy file is documentation-oriented in this release."
+  - "Future versions may allow direct policy-driven execution."

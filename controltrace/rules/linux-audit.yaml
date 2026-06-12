@@ -1,0 +1,34 @@
+rules:
+  - id: CT-LINUX-AUDITD-001
+    title: "Audit Service Does Not Appear Active"
+    platform: "linux"
+    category: "audit-and-accountability"
+    check:
+      type: "command_output_contains"
+      command: "systemctl is-active auditd"
+      expected_substrings:
+        - "active"
+      allow_command_failure: true
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:L"
+      score: 4.4
+    mappings:
+      nist_sp_800_53:
+        - "AU-2"
+        - "AU-6"
+        - "AU-12"
+      disa_stig:
+        - "RHEL-09-653010"
+      mitre_attack:
+        - technique_id: "T1070"
+          technique_name: "Indicator Removal"
+      cwe:
+        - "CWE-778"
+    description: >
+      Audit logging supports detection, investigation, and accountability.
+    recommendation: >
+      Enable and start auditd or the platform-approved audit service.
+    references:
+      - "https://csrc.nist.gov/publications/detail/sp/800-92/final"

@@ -1,0 +1,18 @@
+{
+  "tool_name": "ControlTrace",
+  "tool_version": "0.1.0",
+  "hostname": "sample-host",
+  "platform": "linux",
+  "classification": "UNCLASSIFIED",
+  "total_findings": 3,
+  "failed_findings": 1,
+  "passed_findings": 2,
+  "severity_counts": {
+    "Critical": 0,
+    "High": 1,
+    "Medium": 0,
+    "Low": 0,
+    "Informational": 0
+  },
+  "note": "Sample sanitized report. Generate real reports with the CLI."
+}

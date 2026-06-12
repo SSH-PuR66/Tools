@@ -1,0 +1,92 @@
+rules:
+  - id: RC-SERVICE-REDIS-001
+    title: "Redis Service Exposed"
+    category: "data-store-exposure"
+    match:
+      ports: [6379]
+      services: ["redis"]
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L"
+      score: 9.1
+    mappings:
+      nist_sp_800_53:
+        - "AC-3"
+        - "AC-6"
+        - "CM-7"
+        - "SC-7"
+      mitre_attack:
+        - technique_id: "T1210"
+          technique_name: "Exploitation of Remote Services"
+        - technique_id: "T1552"
+          technique_name: "Unsecured Credentials"
+      cwe:
+        - "CWE-284"
+    description: >
+      Redis should not be exposed to untrusted networks.
+    recommendation: >
+      Bind Redis to localhost or trusted interfaces, require authentication, and restrict network access.
+    references:
+      - "https://attack.mitre.org/techniques/T1210/"
+
+  - id: RC-SERVICE-VNC-001
+    title: "VNC Service Exposed"
+    category: "remote-access-risk"
+    match:
+      ports: [5900]
+      services: ["vnc"]
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L"
+      score: 9.1
+    mappings:
+      nist_sp_800_53:
+        - "AC-17"
+        - "IA-2"
+        - "SC-7"
+      mitre_attack:
+        - technique_id: "T1021.005"
+          technique_name: "VNC"
+        - technique_id: "T1110"
+          technique_name: "Brute Force"
+      cwe:
+        - "CWE-287"
+    description: >
+      Exposed VNC can permit unauthorized graphical remote access if weakly protected.
+    recommendation: >
+      Disable VNC if unnecessary, require strong authentication, and restrict access to trusted networks or VPN.
+    references:
+      - "https://attack.mitre.org/techniques/T1021/005/"
+
+  - id: RC-SERVICE-POSTGRES-001
+    title: "PostgreSQL Service Exposed"
+    category: "database-exposure"
+    match:
+      ports: [5432]
+      services: ["postgresql"]
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L"
+      score: 7.3
+    mappings:
+      nist_sp_800_53:
+        - "AC-3"
+        - "AC-6"
+        - "SC-7"
+        - "CM-7"
+      mitre_attack:
+        - technique_id: "T1210"
+          technique_name: "Exploitation of Remote Services"
+        - technique_id: "T1005"
+          technique_name: "Data from Local System"
+      cwe:
+        - "CWE-200"
+    description: >
+      Exposed database services increase the risk of unauthorized access, credential attacks, and data exposure.
+    recommendation: >
+      Restrict PostgreSQL access to trusted application hosts, require strong authentication, and monitor failed login attempts.
+    references:
+      - "https://attack.mitre.org/techniques/T1210/"

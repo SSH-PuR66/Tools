@@ -1,0 +1,2 @@
+Weakness ID,Weakness Name,Source,Asset Identifier,Original Risk Rating,Adjusted Risk Rating,Status
+CT-LINUX-SSH-ROOT-001,SSH Root Login Is Not Explicitly Disabled,ControlTrace,sample-host,High,High,Open
