@@ -1,0 +1,70 @@
+rules:
+  - id: CT-LINUX-FW-UFW-001
+    title: "Host Firewall Does Not Appear Enabled"
+    platform: "linux"
+    category: "boundary-protection"
+    check:
+      type: "command_output_contains"
+      command: "ufw status"
+      expected_substrings:
+        - "Status: active"
+      allow_command_failure: true
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+      score: 5.7
+    mappings:
+      nist_sp_800_53:
+        - "SC-7"
+        - "CM-6"
+        - "AC-4"
+      disa_stig:
+        - "RHEL-09-251010"
+      mitre_attack:
+        - technique_id: "T1046"
+          technique_name: "Network Service Discovery"
+        - technique_id: "T1021"
+          technique_name: "Remote Services"
+      cwe:
+        - "CWE-693"
+    description: >
+      A disabled or missing host firewall can increase exposure to unauthorized network access.
+    recommendation: >
+      Enable and configure a host firewall appropriate for the environment, such as ufw, firewalld, nftables, or iptables.
+    references:
+      - "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"
+
+  - id: CT-LINUX-FIREWALLD-001
+    title: "Firewalld Does Not Appear Active"
+    platform: "linux"
+    category: "boundary-protection"
+    check:
+      type: "command_output_contains"
+      command: "systemctl is-active firewalld"
+      expected_substrings:
+        - "active"
+      allow_command_failure: true
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L"
+      score: 5.7
+    mappings:
+      nist_sp_800_53:
+        - "SC-7"
+        - "CM-6"
+        - "AC-4"
+      disa_stig:
+        - "RHEL-09-251010"
+      mitre_attack:
+        - technique_id: "T1046"
+          technique_name: "Network Service Discovery"
+      cwe:
+        - "CWE-693"
+    description: >
+      Firewalld is a common host firewall manager. If inactive, the host may rely only on upstream controls.
+    recommendation: >
+      Enable firewalld or document an approved alternate host firewall mechanism.
+    references:
+      - "https://public.cyber.mil/stigs/"

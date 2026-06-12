@@ -1,0 +1,29 @@
+rules:
+  - id: CT-FIXTURE-SSH-001
+    title: "Fixture SSH Root Login Disabled"
+    platform: "linux"
+    category: "access-control"
+    check:
+      type: "file_contains_setting"
+      path: "/tmp/sshd_config"
+      key: "PermitRootLogin"
+      expected_values:
+        - "no"
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L"
+      score: 7.8
+    mappings:
+      nist_sp_800_53:
+        - "AC-6"
+      disa_stig:
+        - "TEST-STIG"
+      mitre_attack:
+        - technique_id: "T1078"
+          technique_name: "Valid Accounts"
+      cwe:
+        - "CWE-250"
+    description: "Fixture test rule."
+    recommendation: "Set PermitRootLogin no."
+    references: []

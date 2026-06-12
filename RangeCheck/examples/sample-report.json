@@ -1,0 +1,17 @@
+{
+  "tool_name": "RangeCheck",
+  "tool_version": "0.2.0",
+  "target": "127.0.0.1",
+  "classification": "UNCLASSIFIED",
+  "total_hosts": 1,
+  "total_services": 2,
+  "total_vulnerabilities": 1,
+  "severity_counts": {
+    "Critical": 0,
+    "High": 0,
+    "Medium": 1,
+    "Low": 0,
+    "Informational": 0
+  },
+  "note": "Sample sanitized report. Generate real reports with the CLI."
+}

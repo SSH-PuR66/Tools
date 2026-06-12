@@ -1,0 +1,34 @@
+rules:
+  - id: CT-LINUX-ACCOUNTS-SHELLS-001
+    title: "Unexpected Interactive Shell Accounts Require Review"
+    platform: "linux"
+    category: "account-management"
+    check:
+      type: "interactive_shell_review"
+      allowed_users:
+        - "root"
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N"
+      score: 5.5
+    mappings:
+      nist_sp_800_53:
+        - "AC-2"
+        - "AC-6"
+        - "IA-2"
+      disa_stig:
+        - "RHEL-09-411015"
+      mitre_attack:
+        - technique_id: "T1078"
+          technique_name: "Valid Accounts"
+        - technique_id: "T1087"
+          technique_name: "Account Discovery"
+      cwe:
+        - "CWE-266"
+    description: >
+      Accounts with interactive shells should be reviewed to confirm they are authorized and necessary.
+    recommendation: >
+      Disable unnecessary accounts, assign nologin shells to service accounts, and document approved interactive users.
+    references:
+      - "https://attack.mitre.org/techniques/T1078/"

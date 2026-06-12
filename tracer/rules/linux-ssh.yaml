@@ -1,0 +1,76 @@
+rules:
+  - id: CT-LINUX-SSH-ROOT-001
+    title: "SSH Root Login Is Not Explicitly Disabled"
+    platform: "linux"
+    category: "access-control"
+    check:
+      type: "file_contains_setting"
+      path: "/etc/ssh/sshd_config"
+      key: "PermitRootLogin"
+      expected_values:
+        - "no"
+    severity: "High"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:L"
+      score: 7.8
+    mappings:
+      nist_sp_800_53:
+        - "AC-2"
+        - "AC-6"
+        - "IA-2"
+        - "CM-6"
+      disa_stig:
+        - "RHEL-09-255050"
+      mitre_attack:
+        - technique_id: "T1078"
+          technique_name: "Valid Accounts"
+        - technique_id: "T1021.004"
+          technique_name: "SSH"
+      cwe:
+        - "CWE-250"
+    description: >
+      SSH root login should be explicitly disabled to reduce the likelihood of privileged remote access.
+    recommendation: >
+      Set PermitRootLogin no in /etc/ssh/sshd_config, validate configuration, and restart sshd.
+    references:
+      - "https://public.cyber.mil/stigs/"
+      - "https://attack.mitre.org/techniques/T1078/"
+
+  - id: CT-LINUX-SSH-PASSWORD-001
+    title: "SSH Password Authentication Is Enabled"
+    platform: "linux"
+    category: "authentication"
+    check:
+      type: "file_contains_setting"
+      path: "/etc/ssh/sshd_config"
+      key: "PasswordAuthentication"
+      expected_values:
+        - "no"
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N"
+      score: 5.5
+    mappings:
+      nist_sp_800_53:
+        - "IA-2"
+        - "IA-5"
+        - "AC-17"
+        - "CM-6"
+      disa_stig:
+        - "RHEL-09-255060"
+      mitre_attack:
+        - technique_id: "T1110"
+          technique_name: "Brute Force"
+        - technique_id: "T1021.004"
+          technique_name: "SSH"
+      cwe:
+        - "CWE-287"
+    description: >
+      Password-based SSH authentication can increase exposure to credential attacks.
+    recommendation: >
+      Prefer key-based authentication, MFA where available, and disable password authentication when operationally feasible.
+    references:
+      - "https://attack.mitre.org/techniques/T1110/"
+      - "https://public.cyber.mil/stigs/"

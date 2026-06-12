@@ -1,0 +1,72 @@
+rules:
+  - id: CT-LINUX-AUDITD-001
+    title: "Audit Service Does Not Appear Active"
+    platform: "linux"
+    category: "audit-and-accountability"
+    check:
+      type: "command_output_contains"
+      command: "systemctl is-active auditd"
+      expected_substrings:
+        - "active"
+      allow_command_failure: true
+    severity: "Medium"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:L"
+      score: 4.4
+    mappings:
+      nist_sp_800_53:
+        - "AU-2"
+        - "AU-6"
+        - "AU-12"
+      disa_stig:
+        - "RHEL-09-653010"
+      mitre_attack:
+        - technique_id: "T1562.002"
+          technique_name: "Disable Windows Event Logging"
+        - technique_id: "T1070"
+          technique_name: "Indicator Removal"
+      cwe:
+        - "CWE-778"
+    description: >
+      Audit logging supports detection, investigation, and accountability. If auditd is not active,
+      security-relevant events may not be captured.
+    recommendation: >
+      Enable and start auditd or the platform-approved audit service, then validate audit rules and log retention.
+    references:
+      - "https://csrc.nist.gov/publications/detail/sp/800-92/final"
+      - "https://attack.mitre.org/techniques/T1070/"
+
+  - id: CT-LINUX-JOURNAL-PERSISTENT-001
+    title: "Systemd Journal Persistence Is Not Explicitly Configured"
+    platform: "linux"
+    category: "log-retention"
+    check:
+      type: "file_contains_setting"
+      path: "/etc/systemd/journald.conf"
+      key: "Storage"
+      expected_values:
+        - "persistent"
+    severity: "Low"
+    cvss:
+      version: "3.1"
+      vector: "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N"
+      score: 3.3
+    mappings:
+      nist_sp_800_53:
+        - "AU-4"
+        - "AU-11"
+        - "AU-12"
+      disa_stig:
+        - "RHEL-09-652030"
+      mitre_attack:
+        - technique_id: "T1070"
+          technique_name: "Indicator Removal"
+      cwe:
+        - "CWE-778"
+    description: >
+      Persistent log storage helps preserve system events across reboots.
+    recommendation: >
+      Configure Storage=persistent in journald.conf where appropriate and validate log retention requirements.
+    references:
+      - "https://csrc.nist.gov/publications/detail/sp/800-92/final"

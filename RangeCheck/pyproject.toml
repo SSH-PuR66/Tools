@@ -1,0 +1,44 @@
+[project]
+name = "rangecheck"
+version = "0.2.0"
+description = "Authorized network exposure assessment with NIST SP 800-53, MITRE ATT&CK, CWE, CVSS, and professional reporting."
+authors = [
+  { name = "Sergio Rodriguez" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "jinja2>=3.1.4",
+  "pyyaml>=6.0.2",
+  "rich>=13.7.1"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-cov>=5.0.0",
+  "ruff>=0.5.0",
+  "mypy>=1.10.0"
+]
+
+[project.scripts]
+rangecheck = "rangecheck.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
