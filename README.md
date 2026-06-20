@@ -2,9 +2,22 @@
 
 > A portfolio-ready monorepo of authorized security assessment tools for exposure review, baseline validation, and remediation reporting.
 
-![Cyber Security](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnI4aWk5bXNzZThvbHlnNTJpejNqamhseWM1dGZ6cTh5c2Q2d2k3biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/077i6AULCXc0FKTj9s/giphy.gif)
-![Dashboard Analytics](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm9xc3U3bHVnMWIwdzR4dXBzbDNwaWM2aXUwM3owdGxva2Fyb3p4YyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oKIPEqDGUULpEU0aQ/giphy.gif)
-![Data Flow](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjI0a2Y1NTN5MmRoeG9tc3V1b203eHdpZ3Jla2xhdGJqNHJmMGtxMyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1BfRG8cK5SPOer97aK/giphy.gif)
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnI4aWk5bXNzZThvbHlnNTJpejNqamhseWM1dGZ6cTh5c2Q2d2k3biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/077i6AULCXc0FKTj9s/giphy.gif" width="220" alt="Cyber Security" />
+      <br/><sub>Security telemetry</sub>
+    </td>
+    <td align="center">
+      <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm9xc3U3bHVnMWIwdzR4dXBzbDNwaWM2aXUwM3owdGxva2Fyb3p4YyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oKIPEqDGUULpEU0aQ/giphy.gif" width="220" alt="Dashboard Analytics" />
+      <br/><sub>Analyst dashboard</sub>
+    </td>
+    <td align="center">
+      <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjI0a2Y1NTN5MmRoeG9tc3V1b203eHdpZ3Jla2xhdGJqNHJmMGtxMyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1BfRG8cK5SPOer97aK/giphy.gif" width="220" alt="Data Flow" />
+      <br/><sub>Pipeline movement</sub>
+    </td>
+  </tr>
+</table>
 
 ## Overview
 
@@ -106,4 +119,3 @@ Open the project you want to work on and follow its local README:
 - MITRE ATT&CK
 - FIRST CVSS v3.1
 - CWE
-
