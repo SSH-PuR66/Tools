@@ -1,114 +1,109 @@
-<div align="center">
+# Security Audit and Verification Tools Suite
 
-#  Security Audit & Verification Tools Suite
+> A portfolio-ready monorepo of authorized security assessment tools for exposure review, baseline validation, and remediation reporting.
 
-<p align="center">
-  <img src="assets/banner.gif" alt="Tools Suite Banner" width="100%"/>
-</p>
+![Cyber Security](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnI4aWk5bXNzZThvbHlnNTJpejNqamhseWM1dGZ6cTh5c2Q2d2k3biZlcD12MV9naWZzX3NlYXJjaCZjdD1n/077i6AULCXc0FKTj9s/giphy.gif)
+![Dashboard Analytics](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMm9xc3U3bHVnMWIwdzR4dXBzbDNwaWM2aXUwM3owdGxva2Fyb3p4YyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oKIPEqDGUULpEU0aQ/giphy.gif)
+![Data Flow](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjI0a2Y1NTN5MmRoeG9tc3V1b203eHdpZ3Jla2xhdGJqNHJmMGtxMyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/1BfRG8cK5SPOer97aK/giphy.gif)
 
-**A monorepo of three production-grade security engineering tools built around real federal and enterprise assessment workflows.**
+## Overview
 
-> Built by [Sergio Rodriguez](https://github.com/SSH-PuR66) — Demonstrating full-lifecycle security engineering: discovery → evidence → mapping → reporting → remediation.
+This repository contains three complementary security tools that turn raw findings into audit-ready output:
 
-<br/>
+1. **RangeCheck** — authorized network exposure assessment with service discovery, fingerprinting, and framework mapping.
+2. **ControlTrace** — local baseline assessment with control evidence, NIST mapping, and POA&M reporting.
+3. **Tracer** — threat-intelligence style workflow components for ingestion, enrichment, graph loading, and analyst-facing query APIs.
 
-[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![NIST](https://img.shields.io/badge/NIST%20SP%20800--53-Mapped-0057A8?style=for-the-badge)](https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final)
-[![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-Mapped-FF0000?style=for-the-badge)](https://attack.mitre.org/)
-[![CVSS](https://img.shields.io/badge/CVSS%20v3.1-Scored-FF6B35?style=for-the-badge)](https://www.first.org/cvss/)
-[![DISA STIG](https://img.shields.io/badge/DISA%20STIG-Style%20Checks-4CAF50?style=for-the-badge)](https://public.cyber.mil/stigs/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
-[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/YOUR_USERNAME/tools/actions)
+The goal is not to look like a toy scanner. The goal is to present a complete security workflow: scope, collect, enrich, correlate, and report.
 
-</div>
+## Visual workflow
 
----
-
-## 📁 What's Inside
-
-This repo contains three independent, production-packaged Python tools that together cover the full security assessment lifecycle:
-
-| Tool | Purpose | Output |
-|------|---------|--------|
-| [ RangeCheck](#-rangecheck) | Network exposure assessment & service fingerprinting | HTML · JSON · CSV |
-| [ ControlTrace](#-controltrace) | Local baseline compliance & STIG-style checks | HTML · JSON · CSV · POA&M |
-| [ Tracer](#-tracer) | System configuration auditing & POAM planning | HTML · JSON · CSV · POA&M |
-
----
-
-##  RangeCheck
-
-<p align="center">
-  <img src="assets/rangecheck-demo.gif" alt="RangeCheck Demo" width="85%"/>
-</p>
-
-### What It Does
-
-RangeCheck is an **authorized network exposure assessment tool** — it goes far beyond a basic port scanner. It performs concurrent TCP service discovery, lightweight fingerprinting, rule-based finding classification, and multi-format reporting — all mapped to industry-standard frameworks.
-
-### What I Built / What I Learned
-
-- **Async TCP scanning** with `asyncio` — handling hundreds of concurrent connections efficiently without threading overhead
-- **YAML-driven rule engine** — findings are defined declaratively, making the tool extensible without touching source code
-- **CVSS v3.1 vector validation** — learned to parse and validate real CVSS strings, not just assign arbitrary scores
-- **Framework mapping** — manually mapped findings to NIST SP 800-53, MITRE ATT&CK Enterprise TTP IDs, and CWE
-- **Jinja2 HTML templating** — generated professional audit-grade reports from structured scan data
-- **Python packaging** with `pyproject.toml`, CLI entrypoints, and `pytest` test suite with coverage
-- **GitHub Actions CI** — automated linting (ruff), type checking (mypy), and test runs on every push
-
-### Features
-
-• Concurrent TCP scanning via asyncio • CIDR and single-host targeting • YAML scope files with explicit authorization gates • Out-of-scope IP exclusion support • HTTP/HTTPS header fingerprinting • Generic banner grabbing • YAML rule engine for finding classification • CVSS v3.1 vector validation & metadata • NIST SP 800-53 Rev. • 5 control mapping • MITRE ATT&CK TTP mapping • CWE mapping • HTML, JSON, CSV report generation • Rotating file logs • pytest suite + GitHub Actions CI
-
-
-### Quick Start
-
-```bash
-# Clone and install
-git clone https://github.com/YOUR_USERNAME/tools.git
-cd tools/RangeCheck
-python -m venv .venv
-
-# Linux / macOS
-source .venv/bin/activate
-
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
-
-pip install -e ".[dev]"
-
-# Scan localhost with specific ports
-rangecheck 127.0.0.1 --confirm-authorized --ports 22,80,443 --output-dir reports
-
-# Scan using a YAML scope file
-rangecheck --scope examples/sample-scope.yaml --ports 22,80,443,445,3389
-
-# Scan a full lab subnet
-rangecheck 192.168.56.0/24 --confirm-authorized --ports 1-1024 --concurrency 250 --timeout 1.0
-
+```mermaid
+flowchart LR
+    A[Authorized scope] --> B[Discovery or collection]
+    B --> C[Normalize and validate]
+    C --> D[Map to frameworks]
+    D --> E[Generate reports]
+    E --> F[Remediate and review]
 ```
-Assesment Lifecycle
 
-┌──────────────────────────────────────────────────────────────────┐
-│  1. Scope Validation  →  YAML scope file or --confirm-authorized │
-│  2. Service Discovery →  Async TCP connection attempts           │
-│  3. Fingerprinting    →  Banner grab + HTTP/S headers            │
-│  4. Rule Evaluation   →  YAML rules classify findings            │
-│  5. Framework Mapping →  NIST · MITRE ATT&CK · CWE               │
-│  6. CVSS Scoring      →  v3.1 vector validation & metadata       │
-│  7. Report Generation →  HTML · JSON · CSV                       │
-└──────────────────────────────────────────────────────────────────┘
+## What each project does
 
-Report Outputs
-File's & Purpose
-controltrace-report.html -	Human-readable audit report
-controltrace-report.json -	Machine-readable for automation
-controltrace-findings.csv	- Spreadsheet-ready findings list
-controltrace-poam.csv	POA&M - federal remediation tracking format
+| Project | Purpose | Output |
+|---|---|---|
+| RangeCheck | Safe network exposure review | HTML, JSON, CSV reports |
+| ControlTrace | Local baseline and control assessment | HTML, JSON, CSV, POA&M |
+| Tracer | Threat data pipeline and correlation layer | API, graph, SIEM enrichment |
 
+## Project highlights
 
-All three tools are designed for authorized use only.
+### RangeCheck
 
-Only run these tools against systems and networks you own or are explicitly authorized to assess
-None of these tools perform exploitation, credential attacks, brute force, evasion, persistence, or destructive testing
-These tools are built for defense, compliance validation, lab assessment, and portfolio demonstration
+- Concurrent TCP service discovery
+- Lightweight banner and header fingerprinting
+- YAML-driven finding classification
+- CVSS metadata and framework mapping
+- HTML, JSON, and CSV reporting
+
+### ControlTrace
+
+- DISA STIG-style local checks
+- Evidence collection and control tracing
+- NIST SP 800-53 and MITRE ATT&CK mapping
+- POA&M-oriented remediation reporting
+- Audit-friendly export formats
+
+### Tracer
+
+- Kafka ingestion and normalization
+- Elasticsearch enrichment and search
+- Neo4j graph loading for relationship analysis
+- Flask API for indicator and graph queries
+- Wazuh/SIEM alert enrichment flow
+
+## Repository layout
+
+```txt
+.
+├── RangeCheck/
+├── controltrace/
+├── tracer/
+├── complete_missing_files.py
+└── README.md
+```
+
+## Why this stands out in a portfolio
+
+- It shows end-to-end security engineering, not just a single script.
+- It separates safe discovery, compliance mapping, and intel correlation into different tools.
+- It uses real reporting artifacts that hiring managers can inspect.
+- It communicates maturity: authorization, validation, traceability, and remediation.
+
+## Safety and scope
+
+These tools are built for authorized environments only.
+
+- No exploitation
+- No credential attacks
+- No evasion or persistence
+- No destructive testing
+
+## Quick start
+
+Open the project you want to work on and follow its local README:
+
+- `RangeCheck/README.md`
+- `controltrace/README.md`
+- `tracer/README.md`
+
+## Public references
+
+- NIST SP 800-53
+- NIST SP 800-115
+- NIST SP 800-30
+- NIST SP 800-37
+- DISA STIG Library
+- MITRE ATT&CK
+- FIRST CVSS v3.1
+- CWE
+
