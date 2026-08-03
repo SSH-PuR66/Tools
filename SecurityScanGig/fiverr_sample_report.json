@@ -1,0 +1,82 @@
+{
+  "tool_name": "RangeCheck",
+  "tool_version": "0.2.0",
+  "target": "redacted-host.client.example",
+  "started_at": "2026-07-03T18:00:00+00:00",
+  "completed_at": "2026-07-03T18:07:42+00:00",
+  "classification": "SAMPLE — DEMONSTRATION ONLY",
+  "distribution": "Public sample (all client identifiers redacted)",
+  "methodology": "Authorized external service discovery, banner fingerprinting, and exposure classification against a client-approved scope.",
+  "total_hosts": 1,
+  "total_services": 4,
+  "total_vulnerabilities": 3,
+  "severity_counts": { "Critical": 0, "High": 1, "Medium": 1, "Low": 1, "Informational": 0 },
+  "hosts": [
+    {
+      "host": "redacted-host.client.example",
+      "services": [
+        { "host": "redacted-host.client.example", "port": 22, "protocol": "tcp", "state": "open", "service_name": "ssh", "banner": "SSH-2.0-OpenSSH_7.4" },
+        { "host": "redacted-host.client.example", "port": 80, "protocol": "tcp", "state": "open", "service_name": "http", "banner": "Apache/2.4.29" },
+        { "host": "redacted-host.client.example", "port": 443, "protocol": "tcp", "state": "open", "service_name": "https", "banner": "Apache/2.4.29" },
+        { "host": "redacted-host.client.example", "port": 3306, "protocol": "tcp", "state": "open", "service_name": "mysql", "banner": "5.7.33" }
+      ],
+      "vulnerabilities": [
+        {
+          "rule_id": "EXP-DB-001",
+          "host": "redacted-host.client.example",
+          "port": 3306,
+          "title": "Database service exposed to the public internet",
+          "category": "Exposure",
+          "description": "A MySQL database service on port 3306 is reachable from the public internet. Database services should never be directly exposed; they are a primary target for credential-stuffing and known-CVE exploitation.",
+          "severity": "High",
+          "cvss": { "version": "3.1", "vector": "AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H", "score": 8.6 },
+          "mappings": {
+            "nist_sp_800_53": ["AC-4", "SC-7", "SC-7(3)"],
+            "mitre_attack": [{ "id": "T1190", "name": "Exploit Public-Facing Application" }],
+            "cwe": ["CWE-668"]
+          },
+          "recommendation": "Restrict port 3306 to trusted internal hosts or a VPN using a firewall/security group. If remote access is required, place the database behind a bastion or SSH tunnel and never bind it to 0.0.0.0.",
+          "evidence": "TCP connect to redacted-host.client.example:3306 returned MySQL handshake banner 5.7.33.",
+          "references": ["https://attack.mitre.org/techniques/T1190/"]
+        },
+        {
+          "rule_id": "EXP-SSH-002",
+          "host": "redacted-host.client.example",
+          "port": 22,
+          "title": "Outdated SSH server version",
+          "category": "Patch management",
+          "description": "The SSH banner reports OpenSSH 7.4, released in 2016. Multiple vulnerabilities have been disclosed against this branch. Running end-of-life SSH increases the risk of compromise.",
+          "severity": "Medium",
+          "cvss": { "version": "3.1", "vector": "AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L", "score": 5.3 },
+          "mappings": {
+            "nist_sp_800_53": ["SI-2", "SI-2(2)"],
+            "mitre_attack": [{ "id": "T1190", "name": "Exploit Public-Facing Application" }],
+            "cwe": ["CWE-1104"]
+          },
+          "recommendation": "Upgrade OpenSSH to the current stable release provided by your OS vendor and enable automatic security updates. Disable password authentication in favor of keys.",
+          "evidence": "Banner: SSH-2.0-OpenSSH_7.4",
+          "references": []
+        },
+        {
+          "rule_id": "EXP-HTTP-003",
+          "host": "redacted-host.client.example",
+          "port": 80,
+          "title": "HTTP served without redirect to HTTPS",
+          "category": "Transport security",
+          "description": "The web server responds on plain HTTP (port 80) without redirecting to HTTPS. Traffic on port 80 is unencrypted and can be intercepted or modified in transit.",
+          "severity": "Low",
+          "cvss": { "version": "3.1", "vector": "AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N", "score": 3.1 },
+          "mappings": {
+            "nist_sp_800_53": ["SC-8", "SC-8(1)"],
+            "mitre_attack": [{ "id": "T1557", "name": "Adversary-in-the-Middle" }],
+            "cwe": ["CWE-319"]
+          },
+          "recommendation": "Configure a 301 redirect from HTTP to HTTPS and enable HSTS with a long max-age. Obtain a free certificate via Let's Encrypt if one is not already in place.",
+          "evidence": "GET / on port 80 returned 200 OK with no Location redirect header.",
+          "references": []
+        }
+      ]
+    }
+  ]
+}
+
